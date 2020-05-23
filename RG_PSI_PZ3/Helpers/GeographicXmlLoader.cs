@@ -19,23 +19,8 @@ namespace RG_PSI_PZ3.Helpers
             _doc.Load(path);
         }
 
-        public IEnumerable<NodeEntity> GetNodeEntities(string xpath = "/NetworkModel/Nodes/NodeEntity")
-        {
-            return GetEntities<NodeEntity>(xpath);
-        }
-
-        public IEnumerable<SubstationEntity> GetSubstationEntities(string xpath = "/NetworkModel/Substations/SubstationEntity")
-        {
-            return GetEntities<SubstationEntity>(xpath);
-        }
-
-        public IEnumerable<SwitchEntity> GetSwitchEntities(string xpath = "/NetworkModel/Switches/SwitchEntity")
-        {
-            return GetEntities<SwitchEntity>(xpath, (xmlNode, entity) =>
-            {
-                entity.Status = xmlNode.SelectSingleNode("Status").InnerText;
-            });
-        }
+        public Range LatitudeRange { get; } = new Range(min: 45.2325, max: 45.277031);
+        public Range LongitudeRange { get; } = new Range(min: 19.793909, max: 19.894459);
 
         public IEnumerable<LineEntity> GetLineEntities(string xpath = "/NetworkModel/Lines/LineEntity")
         {
@@ -56,10 +41,30 @@ namespace RG_PSI_PZ3.Helpers
                     SecondEnd = long.Parse(node.SelectSingleNode("SecondEnd").InnerText)
                 };
 
+                // TODO: Read Vertices
+
                 lineEntities.Add(line);
             }
 
             return lineEntities;
+        }
+
+        public IEnumerable<NodeEntity> GetNodeEntities(string xpath = "/NetworkModel/Nodes/NodeEntity")
+        {
+            return GetEntities<NodeEntity>(xpath);
+        }
+
+        public IEnumerable<SubstationEntity> GetSubstationEntities(string xpath = "/NetworkModel/Substations/SubstationEntity")
+        {
+            return GetEntities<SubstationEntity>(xpath);
+        }
+
+        public IEnumerable<SwitchEntity> GetSwitchEntities(string xpath = "/NetworkModel/Switches/SwitchEntity")
+        {
+            return GetEntities<SwitchEntity>(xpath, (xmlNode, entity) =>
+            {
+                entity.Status = xmlNode.SelectSingleNode("Status").InnerText;
+            });
         }
 
         private IEnumerable<T> GetEntities<T>(string xpath, Action<XmlNode, T> action = null) where T : PowerEntity, new()
@@ -75,6 +80,11 @@ namespace RG_PSI_PZ3.Helpers
                 double utmY = double.Parse(item.SelectSingleNode("Y").InnerText, CultureInfo.InvariantCulture);
 
                 CoordinateConversion.ToLatLon(utmX, utmY, _zoneUtm, out double x, out double y);
+
+                if (!LatitudeRange.IsInRange(x) || !LongitudeRange.IsInRange(y))
+                {
+                    continue;
+                }
 
                 var entity = new T() { Id = id, Name = name, X = x, Y = y };
 
