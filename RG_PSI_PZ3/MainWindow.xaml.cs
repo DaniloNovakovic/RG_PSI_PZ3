@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using RG_PSI_PZ3.Helpers;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace RG_PSI_PZ3
@@ -68,6 +72,30 @@ namespace RG_PSI_PZ3
                 _scaleTransform.ScaleX = scaleX;
                 _scaleTransform.ScaleY = scaleY;
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadXml();
+        }
+
+        private void LoadXml()
+        {
+            var loader = new GeographicXmlLoader();
+
+            // Draw Nodes
+            var substationEntities = loader.GetSubstationEntities();
+            Debug.WriteLine($"Substations: {substationEntities.Count()}");
+
+            var nodeEntities = loader.GetNodeEntities();
+            Debug.WriteLine($"Nodes: {nodeEntities.Count()}");
+
+            var switchEntities = loader.GetSwitchEntities();
+            Debug.WriteLine($"Switches: {switchEntities.Count()}");
+
+            // Draw Lines
+            var lineEntities = loader.GetLineEntities();
+            Debug.WriteLine($"Lines: {lineEntities.Count()}");
         }
     }
 }
