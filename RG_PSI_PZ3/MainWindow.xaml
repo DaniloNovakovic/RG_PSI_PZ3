@@ -32,8 +32,8 @@
                                 </GeometryModel3D.Material>
                                 <GeometryModel3D.Geometry>
                                     <MeshGeometry3D Positions="-1,-1,1 1,-1,1 1,1,1 -1,1,1"
-                                TextureCoordinates="0,1 1,1 1,0 0,0"
-                                TriangleIndices="0 1 2 0 2 3" />
+                                                    TextureCoordinates="0,1 1,1 1,0 0,0"
+                                                    TriangleIndices="0 1 2 0 2 3" />
                                 </GeometryModel3D.Geometry>
                                 <GeometryModel3D.Transform>
                                     <Transform3DGroup>

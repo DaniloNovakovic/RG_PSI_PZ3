@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RG_PSI_PZ3
 {
@@ -20,9 +8,9 @@ namespace RG_PSI_PZ3
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Point start = new Point();
-        private Point diffOffset = new Point();
         private readonly int zoomMax = 7;
+        private Point diffOffset = new Point();
+        private Point start = new Point();
         private int zoomCurent = 1;
 
         public MainWindow()
@@ -47,11 +35,11 @@ namespace RG_PSI_PZ3
         {
             if (_viewport.IsMouseCaptured)
             {
-                Point end = e.GetPosition(this);
+                var end = e.GetPosition(this);
                 double offsetX = end.X - start.X;
                 double offsetY = end.Y - start.Y;
-                double w = this.Width;
-                double h = this.Height;
+                double w = Width;
+                double h = Height;
                 double translateX = (offsetX * 100) / w;
                 double translateY = -(offsetY * 100) / h;
                 _translateTransform.OffsetX = diffOffset.X + (translateX / (100 * _scaleTransform.ScaleX));
@@ -61,7 +49,7 @@ namespace RG_PSI_PZ3
 
         private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Point p = e.MouseDevice.GetPosition(this);
+            var p = e.MouseDevice.GetPosition(this);
             double scaleX = 1;
             double scaleY = 1;
             if (e.Delta > 0 && zoomCurent < zoomMax)
