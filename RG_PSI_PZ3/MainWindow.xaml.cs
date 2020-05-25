@@ -1,9 +1,12 @@
 ﻿using RG_PSI_PZ3.Helpers;
+using RG_PSI_PZ3.Models;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Point = System.Windows.Point;
 
 namespace RG_PSI_PZ3
 {
@@ -82,20 +85,33 @@ namespace RG_PSI_PZ3
         private void LoadXml()
         {
             var loader = new GeographicXmlLoader();
+            var mapper = new PowerEntityTo3DMapper();
 
             // Draw Nodes
             var substationEntities = loader.GetSubstationEntities();
             Debug.WriteLine($"Substations: {substationEntities.Count()}");
+            DrawNodes(substationEntities, mapper);
 
             var nodeEntities = loader.GetNodeEntities();
             Debug.WriteLine($"Nodes: {nodeEntities.Count()}");
+            DrawNodes(nodeEntities, mapper);
 
             var switchEntities = loader.GetSwitchEntities();
             Debug.WriteLine($"Switches: {switchEntities.Count()}");
+            DrawNodes(switchEntities, mapper);
 
             // Draw Lines
             var lineEntities = loader.GetLineEntities();
             Debug.WriteLine($"Lines: {lineEntities.Count()}");
+        }
+
+        private void DrawNodes(IEnumerable<PowerEntity> entitites, PowerEntityTo3DMapper mapper)
+        {
+            foreach (var entity in entitites)
+            {
+                var model = mapper.MapTo3D(entity);
+                _modelGroup.Children.Add(model);
+            }
         }
     }
 }

@@ -65,6 +65,8 @@
     </Compile>
     <Compile Include="Helpers\CoordinateConversion.cs" />
     <Compile Include="Helpers\GeographicXmlLoader.cs" />
+    <Compile Include="Helpers\Indices.cs" />
+    <Compile Include="Helpers\PowerEntityTo3DMapper.cs" />
     <Compile Include="Helpers\Range.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
