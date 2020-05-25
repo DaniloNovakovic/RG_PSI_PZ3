@@ -7,9 +7,12 @@ namespace RG_PSI_PZ3.Helpers
     public class PowerEntityTo3DMapper
     {
         public Brush Brush { get; set; } = Brushes.MediumPurple;
-        public double ElementHeight { get; set; } = 0.1;
-        public double ElementWidth { get; set; } = 0.1;
-        public double ElementZ { get; set; } = 0.1;
+
+        public const double DefaultElementSize = 0.01;
+        public double ElementHeight { get; set; } = DefaultElementSize;
+        public double ElementWidth { get; set; } = DefaultElementSize;
+        public double ElementZ { get; set; } = DefaultElementSize;
+
         public Range LatitudeRange { get; } = new Range(min: 45.2325, max: 45.277031);
         public Range LongitudeRange { get; } = new Range(min: 19.793909, max: 19.894459);
         public Range MapXRange { get; set; } = new Range(-1.5, 1.5);
@@ -46,7 +49,7 @@ namespace RG_PSI_PZ3.Helpers
                 new Point3D(x + ElementWidth, y, 0),
                 new Point3D(x, y + ElementHeight, 0),
                 new Point3D(x + ElementWidth, y + ElementHeight, 0),
-                new Point3D(x, y, 1),
+                new Point3D(x, y, ElementZ),
                 new Point3D(x + ElementWidth, y, ElementZ),
                 new Point3D(x, y + ElementHeight, ElementZ),
                 new Point3D(x + ElementWidth, y + ElementHeight, ElementZ)
