@@ -12,7 +12,7 @@
                     MouseLeftButtonUp="Viewport_MouseLeftButtonUp" MouseMove="Viewport_MouseMove"
                     MouseWheel="Viewport_MouseWheel">
             <Viewport3D.Camera>
-                <PerspectiveCamera Position="0,0,2" LookDirection="0,0,-2" />
+                <PerspectiveCamera Position="0,0,4" LookDirection="0,0,-2" />
             </Viewport3D.Camera>
             <Viewport3D.Children>
                 <ModelVisual3D>
@@ -23,6 +23,14 @@
                 <ModelVisual3D>
                     <ModelVisual3D.Content>
                         <Model3DGroup x:Name="Cube">
+                            <Model3DGroup.Transform>
+                                <Transform3DGroup>
+                                    <TranslateTransform3D x:Name="_translateTransform" OffsetX="0" OffsetY="0" OffsetZ="0" />
+                                    <ScaleTransform3D x:Name="_scaleTransform" ScaleX="1" ScaleY="1" ScaleZ="1" />
+                                </Transform3DGroup>
+                            </Model3DGroup.Transform>
+
+                            <!-- Map -->
                             <GeometryModel3D>
                                 <GeometryModel3D.Material>
                                     <DiffuseMaterial>
@@ -32,16 +40,10 @@
                                     </DiffuseMaterial>
                                 </GeometryModel3D.Material>
                                 <GeometryModel3D.Geometry>
-                                    <MeshGeometry3D Positions="-1,-1,1 1,-1,1 1,1,1 -1,1,1"
+                                    <MeshGeometry3D Positions="-1,-1,0 1,-1,0 1,1,0 -1,1,0"
                                                     TextureCoordinates="0,1 1,1 1,0 0,0"
                                                     TriangleIndices="0 1 2 0 2 3" />
                                 </GeometryModel3D.Geometry>
-                                <GeometryModel3D.Transform>
-                                    <Transform3DGroup>
-                                        <TranslateTransform3D x:Name="_translateTransform" OffsetX="0" OffsetY="0" OffsetZ="0" />
-                                        <ScaleTransform3D x:Name="_scaleTransform" ScaleX="1" ScaleY="1" ScaleZ="1" />
-                                    </Transform3DGroup>
-                                </GeometryModel3D.Transform>
                             </GeometryModel3D>
                         </Model3DGroup>
                     </ModelVisual3D.Content>
