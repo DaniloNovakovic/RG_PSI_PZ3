@@ -40,8 +40,8 @@ namespace RG_PSI_PZ3.Helpers
             * ex. Positions="0 0 0  1 0 0  0 1 0  1 1 0  0 0 1  1 0 1  0 1 1  1 1 1"
             */
 
-            double x = CoordinateConversion.Scale(entity.X, LatitudeRange.Min, LatitudeRange.Max, MapXRange.Min, MapXRange.Max);
-            double y = CoordinateConversion.Scale(entity.Y, LongitudeRange.Min, LongitudeRange.Max, MapYRange.Min, MapYRange.Max);
+            double x = CoordinateConversion.Scale(entity.Y, LongitudeRange.Min, LongitudeRange.Max, MapXRange.Min, MapXRange.Max);
+            double y = CoordinateConversion.Scale(entity.X, LatitudeRange.Min, LatitudeRange.Max, MapYRange.Min, MapYRange.Max);
 
             return new Point3DCollection()
             {
