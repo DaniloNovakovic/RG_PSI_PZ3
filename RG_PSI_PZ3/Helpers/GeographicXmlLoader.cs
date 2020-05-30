@@ -13,14 +13,14 @@ namespace RG_PSI_PZ3.Helpers
 
         public GeographicXmlLoader(string path = "Geographic.xml", int zoneUtm = 34)
         {
-            _doc = new XmlDocument();
             _zoneUtm = zoneUtm;
 
+            _doc = new XmlDocument();
             _doc.Load(path);
         }
 
-        public Range LatitudeRange { get; } = new Range(min: 45.2325, max: 45.277031);
-        public Range LongitudeRange { get; } = new Range(min: 19.793909, max: 19.894459);
+        public Range LatitudeRange { get; set; } = new Range(min: 45.2325, max: 45.277031);
+        public Range LongitudeRange { get; set; } = new Range(min: 19.793909, max: 19.894459);
 
         public IEnumerable<LineEntity> GetLineEntities(string xpath = "/NetworkModel/Lines/LineEntity")
         {

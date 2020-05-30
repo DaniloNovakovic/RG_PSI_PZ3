@@ -19,10 +19,13 @@ namespace RG_PSI_PZ3
         private Point diffOffset = new Point();
         private Point start = new Point();
         private int zoomCurent = 1;
+        private Configuration _config;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _config = new Configuration();
         }
 
         private void Viewport_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -84,25 +87,38 @@ namespace RG_PSI_PZ3
 
         private void LoadXml()
         {
-            var loader = new GeographicXmlLoader();
-            var mapper = new PowerEntityTo3DMapper();
+            var loader = new GeographicXmlLoader()
+            {
+                LatitudeRange = _config.LatitudeRange,
+                LongitudeRange = _config.LongitudeRange
+            };
+
+            var latlonToPlaneMapper = new LatLonToPlaneMapper(_config);
+            var powerEntityMapper = new PowerEntityTo3DMapper(latlonToPlaneMapper);
 
             // Draw Nodes
             var substationEntities = loader.GetSubstationEntities();
-            Debug.WriteLine($"Substations: {substationEntities.Count()}");
-            DrawNodes(substationEntities, mapper);
+            DrawNodes(substationEntities, powerEntityMapper);
 
             var nodeEntities = loader.GetNodeEntities();
-            Debug.WriteLine($"Nodes: {nodeEntities.Count()}");
-            DrawNodes(nodeEntities, mapper);
+            DrawNodes(nodeEntities, powerEntityMapper);
 
             var switchEntities = loader.GetSwitchEntities();
-            Debug.WriteLine($"Switches: {switchEntities.Count()}");
-            DrawNodes(switchEntities, mapper);
+            DrawNodes(switchEntities, powerEntityMapper);
 
             // Draw Lines
+            var lineMapper = new LineEntityTo3DMapper(latlonToPlaneMapper);
             var lineEntities = loader.GetLineEntities();
-            Debug.WriteLine($"Lines: {lineEntities.Count()}");
+            DrawLines(lineEntities, lineMapper);
+        }
+
+        private void DrawLines(IEnumerable<LineEntity> lineEntities, LineEntityTo3DMapper mapper)
+        {
+            foreach (var entity in lineEntities)
+            {
+                var models = mapper.MapTo3D(entity);
+                models.ForEach(g => _modelGroup.Children.Add(g));
+            }
         }
 
         private void DrawNodes(IEnumerable<PowerEntity> entitites, PowerEntityTo3DMapper mapper)

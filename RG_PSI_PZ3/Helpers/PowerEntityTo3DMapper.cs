@@ -9,6 +9,8 @@ namespace RG_PSI_PZ3.Helpers
         public Brush Brush { get; set; } = Brushes.MediumPurple;
 
         public const double DefaultElementSize = 0.01;
+        private readonly IPlaneMapper _mapper;
+
         public double ElementHeight { get; set; } = DefaultElementSize;
         public double ElementWidth { get; set; } = DefaultElementSize;
         public double ElementZ { get; set; } = DefaultElementSize;
@@ -17,6 +19,11 @@ namespace RG_PSI_PZ3.Helpers
         public Range LongitudeRange { get; } = new Range(min: 19.793909, max: 19.894459);
         public Range MapXRange { get; set; } = new Range(-1.5, 1.5);
         public Range MapYRange { get; set; } = new Range(-1, 1);
+
+        public PowerEntityTo3DMapper(IPlaneMapper conversion)
+        {
+            _mapper = conversion;
+        }
 
         public GeometryModel3D MapTo3D(PowerEntity entity)
         {
@@ -40,8 +47,11 @@ namespace RG_PSI_PZ3.Helpers
             * ex. Positions="0 0 0  1 0 0  0 1 0  1 1 0  0 0 1  1 0 1  0 1 1  1 1 1"
             */
 
-            double x = CoordinateConversion.Scale(entity.Y, LongitudeRange.Min, LongitudeRange.Max, MapXRange.Min, MapXRange.Max);
-            double y = CoordinateConversion.Scale(entity.X, LatitudeRange.Min, LatitudeRange.Max, MapYRange.Min, MapYRange.Max);
+            double x = _mapper.MapLongitudeToPlaneX(entity.Y);
+            double y = _mapper.MapLatitudeToPlaneY(entity.X);
+
+            x -= ElementWidth / 2;
+            y -= ElementHeight / 2;
 
             return new Point3DCollection()
             {

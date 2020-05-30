@@ -22,6 +22,6 @@ namespace RG_PSI_PZ3.Models
 
         public long ThermalConstantHeat { get; set; }
 
-        public List<Point> Vertices { get; set; }
+        public List<Point> Vertices { get; set; } = new List<Point>();
     }
 }
