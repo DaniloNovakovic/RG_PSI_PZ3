@@ -8,6 +8,7 @@ namespace RG_PSI_PZ3.Helpers
 {
     public class GeographicXmlLoader
     {
+        private const int LineEntityVerticesIndex = 9;
         private readonly XmlDocument _doc;
         private readonly int _zoneUtm = 34;
 
@@ -41,7 +42,23 @@ namespace RG_PSI_PZ3.Helpers
                     SecondEnd = long.Parse(node.SelectSingleNode("SecondEnd").InnerText)
                 };
 
-                // TODO: Read Vertices
+                foreach (XmlNode pointNode in node.ChildNodes[LineEntityVerticesIndex].ChildNodes)
+                {
+                    var p = new Point
+                    {
+                        X = double.Parse(pointNode.SelectSingleNode("X").InnerText),
+                        Y = double.Parse(pointNode.SelectSingleNode("Y").InnerText)
+                    };
+
+                    CoordinateConversion.ToLatLon(p.X, p.Y, _zoneUtm, out var vertX, out var vertY);
+
+                    if (!LatitudeRange.IsInRange(vertX) || !LongitudeRange.IsInRange(vertY))
+                    {
+                        continue;
+                    }
+
+                    line.Vertices.Add(new Point(vertX, vertY));
+                }
 
                 lineEntities.Add(line);
             }

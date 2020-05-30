@@ -6,19 +6,14 @@ namespace RG_PSI_PZ3.Helpers
 {
     public class PowerEntityTo3DMapper
     {
+        private readonly IPlaneMapper _mapper;
+
         public Brush Brush { get; set; } = Brushes.MediumPurple;
 
         public const double DefaultElementSize = 0.01;
-        private readonly IPlaneMapper _mapper;
-
         public double ElementHeight { get; set; } = DefaultElementSize;
         public double ElementWidth { get; set; } = DefaultElementSize;
         public double ElementZ { get; set; } = DefaultElementSize;
-
-        public Range LatitudeRange { get; } = new Range(min: 45.2325, max: 45.277031);
-        public Range LongitudeRange { get; } = new Range(min: 19.793909, max: 19.894459);
-        public Range MapXRange { get; set; } = new Range(-1.5, 1.5);
-        public Range MapYRange { get; set; } = new Range(-1, 1);
 
         public PowerEntityTo3DMapper(IPlaneMapper conversion)
         {
