@@ -13,7 +13,7 @@ namespace RG_PSI_PZ3.Helpers
         public const double DefaultElementSize = 0.01;
         public double ElementHeight { get; set; } = DefaultElementSize;
         public double ElementWidth { get; set; } = DefaultElementSize;
-        public double ElementZ { get; set; } = DefaultElementSize;
+        public double ElementZ { get; set; } = DefaultElementSize * 1.5;
 
         public PowerEntityTo3DMapper(IPlaneMapper conversion)
         {
