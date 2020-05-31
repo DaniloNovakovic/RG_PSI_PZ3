@@ -15,7 +15,7 @@ namespace RG_PSI_PZ3
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly int zoomMax = 7;
+        private readonly int zoomMax = 30;
         private Point diffOffset = new Point();
         private Point start = new Point();
         private int zoomCurent = 1;

@@ -1,14 +1,16 @@
 ﻿using RG_PSI_PZ3.Models;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
 
 namespace RG_PSI_PZ3.Helpers
 {
     public class LineEntityTo3DMapper
     {
         public Brush Brush { get; set; } = Brushes.DarkRed;
-        public double LineWidth { get; set; } = 0.005;
+        public double LineWidth { get; set; } = 0.0005;
 
         private readonly IPlaneMapper _mapper;
 
@@ -37,19 +39,23 @@ namespace RG_PSI_PZ3.Helpers
         {
             double planeX = _mapper.MapLongitudeToPlaneX(vertice.Y);
             double planeY = _mapper.MapLatitudeToPlaneY(vertice.X);
-            return new Point3D(planeX, planeY, z: 0);
+            return new Point3D(planeX, planeY, z: LineWidth);
         }
 
         private GeometryModel3D Make3DLine(Point3D start, Point3D end, LineEntity tooltip)
         {
-            double offset = LineWidth / 2;
+            var vecDiff = end - start;
+
+            var nVector = Vector3D.CrossProduct(vecDiff, new Vector3D(0, 0, 1));
+            nVector = Vector3D.Divide(nVector, nVector.Length);
+            nVector = Vector3D.Multiply(nVector, LineWidth);
 
             var points = new Point3DCollection()
             {
-                new Point3D(start.X + offset, start.Y - offset, start.Z),
-                new Point3D(start.X - offset, start.Y + offset, start.Z),
-                new Point3D(end.X + offset, end.Y - offset, end.Z),
-                new Point3D(end.X - offset, end.Y + offset, end.Z),
+                start - nVector,
+                start + nVector,
+                end + nVector,
+                end - nVector
             };
 
             var meshGeometry = new MeshGeometry3D
