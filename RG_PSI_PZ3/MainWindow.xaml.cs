@@ -82,51 +82,57 @@ namespace RG_PSI_PZ3
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadXml();
+            var storage = LoadXmlToStorage();
+            DrawEntities(storage);
         }
 
-        private void LoadXml()
+        private Storage LoadXmlToStorage()
         {
             var loader = new GeographicXmlLoader()
             {
                 LatitudeRange = _config.LatitudeRange,
                 LongitudeRange = _config.LongitudeRange
             };
-
-            var latlonToPlaneMapper = new LatLonToPlaneMapper(_config);
-            var powerEntityMapper = new PowerEntityTo3DMapper(latlonToPlaneMapper);
-
-            // Draw Nodes
             var substationEntities = loader.GetSubstationEntities();
-            DrawNodes(substationEntities, powerEntityMapper);
-
             var nodeEntities = loader.GetNodeEntities();
-            DrawNodes(nodeEntities, powerEntityMapper);
-
             var switchEntities = loader.GetSwitchEntities();
-            DrawNodes(switchEntities, powerEntityMapper);
-
-            // Draw Lines
-            var lineMapper = new LineEntityTo3DMapper(latlonToPlaneMapper);
             var lineEntities = loader.GetLineEntities();
-            DrawLines(lineEntities, lineMapper);
+
+            var storage = new Storage();
+            storage.AddRange(substationEntities);
+            storage.AddRange(nodeEntities);
+            storage.AddRange(switchEntities);
+            storage.AddValidLines(lineEntities);
+
+            return storage;
         }
 
-        private void DrawLines(IEnumerable<LineEntity> lineEntities, LineEntityTo3DMapper mapper)
+        private void DrawEntities(Storage storage)
         {
-            foreach (var entity in lineEntities)
+            var latlonToPlaneMapper = new LatLonToPlaneMapper(_config);
+            var powerEntityMapper = new PowerEntityTo3DMapper(latlonToPlaneMapper);
+            var lineMapper = new LineEntityTo3DMapper(latlonToPlaneMapper);
+
+            DrawPowerEntities(storage, powerEntityMapper);
+            DrawLines(storage, lineMapper);
+        }
+
+        private void DrawLines(Storage storage, LineEntityTo3DMapper mapper)
+        {
+            foreach (var lineEntity in storage.LineEntities)
             {
-                var models = mapper.MapTo3D(entity);
+                var models = mapper.MapTo3D(lineEntity);
                 models.ForEach(g => _modelGroup.Children.Add(g));
             }
         }
 
-        private void DrawNodes(IEnumerable<PowerEntity> entitites, PowerEntityTo3DMapper mapper)
+        private void DrawPowerEntities(Storage storage, PowerEntityTo3DMapper mapper)
         {
-            foreach (var entity in entitites)
+            foreach (var cell in storage.PowerEntityCells)
             {
-                var model = mapper.MapTo3D(entity);
-                _modelGroup.Children.Add(model);
+                cell.Model3D = mapper.MapTo3D(cell.PowerEntity);
+                cell.UpdateModelColor();
+                _modelGroup.Children.Add(cell.Model3D);
             }
         }
     }
