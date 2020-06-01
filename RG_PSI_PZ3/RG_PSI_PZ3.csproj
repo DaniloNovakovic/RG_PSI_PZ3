@@ -70,6 +70,7 @@
     <Compile Include="Helpers\Indices.cs" />
     <Compile Include="Helpers\IPlaneMapper.cs" />
     <Compile Include="Helpers\LineEntityTo3DMapper.cs" />
+    <Compile Include="Helpers\Painter3D.cs" />
     <Compile Include="Helpers\PowerEntityStorageCell.cs" />
     <Compile Include="Helpers\PowerEntityTo3DMapper.cs" />
     <Compile Include="Helpers\Range.cs" />

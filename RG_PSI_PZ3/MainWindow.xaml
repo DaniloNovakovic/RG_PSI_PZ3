@@ -28,6 +28,7 @@
                                 <Transform3DGroup>
                                     <TranslateTransform3D x:Name="_translateTransform" OffsetX="0" OffsetY="0" OffsetZ="0" />
                                     <ScaleTransform3D x:Name="_scaleTransform" ScaleX="1" ScaleY="1" ScaleZ="1" />
+                                    <RotateTransform3D x:Name="_rotateTransform" CenterX="0" CenterY="0" CenterZ="0" />
                                 </Transform3DGroup>
                             </Model3DGroup.Transform>
 
