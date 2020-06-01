@@ -1,4 +1,5 @@
 ﻿using RG_PSI_PZ3.Helpers;
+using RG_PSI_PZ3.Helpers.Behaviors;
 using RG_PSI_PZ3.Models;
 using System;
 using System.Windows;
@@ -19,13 +20,17 @@ namespace RG_PSI_PZ3
         private Point _start = new Point();
         private int _zoomCurent = 1;
         private readonly Configuration _config;
-        private Storage _storage;
+        private readonly Storage _storage;
+        private readonly LineClickBehavior _lineClickBehavior;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _config = new Configuration();
+            _storage = new Storage();
+
+            _lineClickBehavior = new LineClickBehavior(_storage);
         }
 
         private void Viewport_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -97,12 +102,14 @@ namespace RG_PSI_PZ3
 
                 if (tagProp is PowerEntity powerEntity)
                 {
+                    _lineClickBehavior.UndoPrevClick();
+
                     // TODO: Show tooltip / Create label
                     Console.WriteLine($"Clicked on {powerEntity}");
                 }
                 else if (tagProp is LineEntity lineEntity)
                 {
-                    // TODO: Change color of FirstNode, and SecondNode
+                    _lineClickBehavior.OnClick(lineEntity);
                     Console.WriteLine($"Clicked on {lineEntity}");
                 }
             }
@@ -118,7 +125,7 @@ namespace RG_PSI_PZ3
                 LongitudeRange = _config.LongitudeRange
             };
 
-            _storage = StorageFactory.LoadStorageFromXML(loader);
+            StorageFactory.LoadXMLToStorage(loader, _storage);
 
             var latlonToPlaneMapper = new LatLonToPlaneMapper(_config);
             var powerEntityMapper = new PowerEntityTo3DMapper(latlonToPlaneMapper);

@@ -25,9 +25,25 @@ namespace RG_PSI_PZ3.Helpers
             }
         }
 
+        private bool _highlighted;
+
+        public bool Highlighted
+        {
+            get => _highlighted;
+            set
+            {
+                _highlighted = value;
+                UpdateModelColor();
+            }
+        }
+
         public void UpdateModelColor()
         {
-            if (_numberOfConnections < 3)
+            if (_highlighted)
+            {
+                Model3D.Material = new DiffuseMaterial(Brushes.Green);
+            }
+            else if (_numberOfConnections < 3)
             {
                 Model3D.Material = new DiffuseMaterial(Brushes.PaleVioletRed);
             }
