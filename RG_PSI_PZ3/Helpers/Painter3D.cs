@@ -6,28 +6,38 @@ namespace RG_PSI_PZ3.Helpers
     public class Painter3D
     {
         private readonly Model3DGroup _modelGroup;
+        private readonly PowerEntityTo3DMapper _powerEntityMapper;
+        private readonly LineEntityTo3DMapper _lineMapper;
 
-        public Painter3D(Model3DGroup modelGroup)
+        public Painter3D(Model3DGroup modelGroup, PowerEntityTo3DMapper powerEntityMapper, LineEntityTo3DMapper lineMapper)
         {
             _modelGroup = modelGroup;
+            _lineMapper = lineMapper;
+            _powerEntityMapper = powerEntityMapper;
         }
 
-        public void DrawLines(Storage storage, LineEntityTo3DMapper mapper)
+        public void DrawEntities(Storage storage)
+        {
+            DrawPowerEntities(storage);
+            DrawLines(storage);
+        }
+
+        private void DrawLines(Storage storage)
         {
             foreach (var lineEntity in storage.LineEntities)
             {
-                var models = mapper.MapTo3D(lineEntity);
+                var models = _lineMapper.MapTo3D(lineEntity);
                 models.ForEach(g => _modelGroup.Children.Add(g));
             }
         }
 
-        public void DrawPowerEntities(Storage storage, PowerEntityTo3DMapper mapper)
+        private void DrawPowerEntities(Storage storage)
         {
             var addedModelsCache = new List<GeometryModel3D>();
 
             foreach (var cell in storage.PowerEntityCells)
             {
-                cell.Model3D = mapper.MapTo3D(cell.PowerEntity);
+                cell.Model3D = _powerEntityMapper.MapTo3D(cell.PowerEntity);
                 cell.UpdateModelColor();
 
                 RiseIfIntersects(cell.Model3D, addedModelsCache);

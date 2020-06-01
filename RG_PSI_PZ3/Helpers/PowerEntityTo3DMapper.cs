@@ -28,11 +28,15 @@ namespace RG_PSI_PZ3.Helpers
                 TriangleIndices = Indices.Cube
             };
 
-            return new GeometryModel3D
+            var model = new GeometryModel3D
             {
                 Geometry = meshGeometry,
                 Material = new DiffuseMaterial(Brush)
             };
+
+            model.SetValue(System.Windows.FrameworkElement.TagProperty, entity);
+
+            return model;
         }
 
         private Point3DCollection MapToPositions(PowerEntity entity)

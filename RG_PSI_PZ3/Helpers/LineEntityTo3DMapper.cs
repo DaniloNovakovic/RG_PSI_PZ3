@@ -1,23 +1,21 @@
 ﻿using RG_PSI_PZ3.Models;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
 
 namespace RG_PSI_PZ3.Helpers
 {
     public class LineEntityTo3DMapper
     {
-        public Brush Brush { get; set; } = Brushes.DarkRed;
-        public double LineWidth { get; set; } = 0.0005;
-
         private readonly IPlaneMapper _mapper;
 
         public LineEntityTo3DMapper(IPlaneMapper mapper)
         {
             _mapper = mapper;
         }
+
+        public Brush Brush { get; set; } = Brushes.DarkRed;
+        public double LineWidth { get; set; } = 0.0005;
 
         public List<GeometryModel3D> MapTo3D(LineEntity entity)
         {
@@ -64,11 +62,15 @@ namespace RG_PSI_PZ3.Helpers
                 TriangleIndices = Indices.Square
             };
 
-            return new GeometryModel3D
+            var model = new GeometryModel3D
             {
-                Geometry = meshGeometry,
-                Material = new DiffuseMaterial(Brush)
+                Material = new DiffuseMaterial(Brush),
+                Geometry = meshGeometry
             };
+
+            model.SetValue(System.Windows.FrameworkElement.TagProperty, tooltip);
+
+            return model;
         }
     }
 }
