@@ -65,6 +65,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\Behaviors\LineClickBehavior.cs" />
+    <Compile Include="Helpers\Behaviors\PowerEntityClickBehavior.cs" />
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\CoordinateConversion.cs" />
     <Compile Include="Helpers\GeographicXmlLoader.cs" />

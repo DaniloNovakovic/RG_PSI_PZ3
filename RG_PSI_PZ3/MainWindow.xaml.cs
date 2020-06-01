@@ -22,6 +22,7 @@ namespace RG_PSI_PZ3
         private readonly Configuration _config;
         private readonly Storage _storage;
         private readonly LineClickBehavior _lineClickBehavior;
+        private readonly PowerEntityClickBehavior _powerEntityClickBehavior;
 
         public MainWindow()
         {
@@ -31,6 +32,7 @@ namespace RG_PSI_PZ3
             _storage = new Storage();
 
             _lineClickBehavior = new LineClickBehavior(_storage);
+            _powerEntityClickBehavior = new PowerEntityClickBehavior(this, _storage);
         }
 
         private void Viewport_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -103,13 +105,14 @@ namespace RG_PSI_PZ3
                 if (tagProp is PowerEntity powerEntity)
                 {
                     _lineClickBehavior.UndoPrevClick();
+                    _powerEntityClickBehavior.OnClick(powerEntity);
 
-                    // TODO: Show tooltip / Create label
                     Console.WriteLine($"Clicked on {powerEntity}");
                 }
                 else if (tagProp is LineEntity lineEntity)
                 {
                     _lineClickBehavior.OnClick(lineEntity);
+
                     Console.WriteLine($"Clicked on {lineEntity}");
                 }
             }
