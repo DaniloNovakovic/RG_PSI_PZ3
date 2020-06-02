@@ -11,6 +11,8 @@
     <Grid>
         <Viewport3D ClipToBounds="True" MouseLeftButtonDown="Viewport_MouseLeftButtonDown" Name="_viewport"
                     MouseLeftButtonUp="Viewport_MouseLeftButtonUp" MouseMove="Viewport_MouseMove"
+                    MouseRightButtonDown="Viewport_MouseRightButtonDown"
+                    MouseRightButtonUp="Viewport_MouseRightButtonUp"
                     MouseWheel="Viewport_MouseWheel">
             <Viewport3D.Camera>
                 <PerspectiveCamera Position="0,0,2" LookDirection="0,0,-2" />
@@ -28,7 +30,11 @@
                                 <Transform3DGroup>
                                     <TranslateTransform3D x:Name="_translateTransform" OffsetX="0" OffsetY="0" OffsetZ="0" />
                                     <ScaleTransform3D x:Name="_scaleTransform" ScaleX="1" ScaleY="1" ScaleZ="1" />
-                                    <RotateTransform3D x:Name="_rotateTransform" CenterX="0" CenterY="0" CenterZ="0" />
+                                    <RotateTransform3D CenterX="0" CenterY="0" CenterZ="0">
+                                        <RotateTransform3D.Rotation>
+                                            <AxisAngleRotation3D Axis="0,0,1" Angle="0" x:Name="_rotateAxisZ" />
+                                        </RotateTransform3D.Rotation>
+                                    </RotateTransform3D>
                                 </Transform3DGroup>
                             </Model3DGroup.Transform>
 

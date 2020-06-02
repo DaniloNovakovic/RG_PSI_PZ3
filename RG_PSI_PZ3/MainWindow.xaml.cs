@@ -19,6 +19,7 @@ namespace RG_PSI_PZ3
         private Point _diffOffset = new Point();
         private Point _start = new Point();
         private int _zoomCurent = 1;
+        private double _prevOffset = 0;
         private readonly Configuration _config;
         private readonly Storage _storage;
         private readonly LineClickBehavior _lineClickBehavior;
@@ -68,8 +69,19 @@ namespace RG_PSI_PZ3
                 double h = Height;
                 double translateX = (offsetX * 100) / w;
                 double translateY = -(offsetY * 100) / h;
-                _translateTransform.OffsetX = _diffOffset.X + (translateX / (100 * _scaleTransform.ScaleX));
-                _translateTransform.OffsetY = _diffOffset.Y + (translateY / (100 * _scaleTransform.ScaleX));
+
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    _translateTransform.OffsetX = _diffOffset.X + (translateX / (100 * _scaleTransform.ScaleX));
+                    _translateTransform.OffsetY = _diffOffset.Y + (translateY / (100 * _scaleTransform.ScaleX));
+                }
+
+                if (e.RightButton == MouseButtonState.Pressed)
+                {
+                    double rotOffset = offsetY > _prevOffset ? translateY : -translateY;
+                    _rotateAxisZ.Angle = (_rotateAxisZ.Angle + rotOffset / 10) % 360;
+                }
+                _prevOffset = offsetY;
             }
         }
 
@@ -136,6 +148,16 @@ namespace RG_PSI_PZ3
             var painter = new Painter3D(_modelGroup, powerEntityMapper, lineMapper);
 
             painter.DrawEntities(_storage);
+        }
+
+        private void Viewport_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _viewport.CaptureMouse();
+        }
+
+        private void Viewport_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _viewport.ReleaseMouseCapture();
         }
     }
 }
