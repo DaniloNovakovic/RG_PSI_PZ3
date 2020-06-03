@@ -25,4 +25,25 @@ Follow these steps to get your development environment set up:
   
 ---
 
+## Usage
+
+![App Demo](./doc/app-demo.gif)
+
+### Controls
+
+- **Move map** - Left click + Mouse move
+- **Rotate map** - Right click + Mouse up/down
+- **Highlight connected nodes** - Left click on line
+- **Display node info** - Left click on node
+
+### Node colors
+
+| Color | Number of Connections |
+| --- | --- |
+| PaleVioletRed | < 3 |
+| MediumVioletRed | <= 5 |
+| Red | > 5 |
+
+---
+
 Copyright 2020 © [DaniloNovakovic](https://github.com/DaniloNovakovic)
